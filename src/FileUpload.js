@@ -1,30 +1,31 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { MdCancel } from "react-icons/md";
 
-function Upload({ onNext, onPrevious }) {
-    const [image, setImage] = useState(null);
-    const [file, setFile] = useState(null);
+function Upload({ onNext, onPrevious, values, handleChange }) {
+    const [image, setImage] = useState(values.image ? URL.createObjectURL(values.image) : null);
+    const [fileName, setFileName] = useState(values.file ? values.file.name : null);
     const fileInputRef = useRef(null);
-    const fileInputRef2 = useRef(null); 
+    const fileInputRef2 = useRef(null);
 
     const handleClick = () => {
         fileInputRef.current.click();
     };
-   
 
     const handleFileClick = () => {
         fileInputRef2.current.click();
     };
-    
 
     const handleCancel = (e) => {
         e.stopPropagation(); // Prevent event from bubbling up
         setImage(null);
+        handleChange({ target: { name: "image", value: null } });
         fileInputRef.current.value = null; // Clear the file input value
     };
+
     const handleFileCancel = (e) => {
         e.stopPropagation(); // Prevent event from bubbling up
-        setFile(null);
+        setFileName(null);
+        handleChange({ target: { name: "file", value: null } });
         fileInputRef2.current.value = null; // Clear the file input value
     };
 
@@ -32,18 +33,20 @@ function Upload({ onNext, onPrevious }) {
         if (e.target.files.length) {
             const selectedImage = e.target.files[0];
             setImage(URL.createObjectURL(selectedImage));
+            handleChange({ target: { name: "image", value: selectedImage } });
         }
     };
 
     const handleFileChange = (e) => {
         if (e.target.files.length) {
             const selectedFile = e.target.files[0];
-            setFile(URL.createObjectURL(selectedFile));
+            setFileName(selectedFile.name);
+            handleChange({ target: { name: "file", value: selectedFile } });
         }
     };
 
     return (
-        <div className=" w-[40%] p-5 bg-slate-400 mx-auto h-auto rounded-lg mt-20 mob:w-80 tab:w-[600px]">
+        <div className="w-[40%] p-5 bg-slate-400 mx-auto h-auto rounded-lg mt-20 mob:w-80 tab:w-[600px]">
             <div className="border-slate-300 flex flex-col-reverse border-2 bg-slate-50 w-full h-48 rounded-xl relative">
                 <div
                     className="absolute inset-4 border-2 border-slate-500 border-dotted rounded-xl flex items-center justify-center cursor-pointer"
@@ -57,7 +60,7 @@ function Upload({ onNext, onPrevious }) {
                                 className="w-full h-full object-cover rounded-lg"
                             />
                             <button
-                                className="absolute top-2 right-2  bg-white p-1 rounded-full"
+                                className="absolute top-2 right-2 bg-white p-1 rounded-full"
                                 onClick={handleCancel}
                             >
                                 <MdCancel />
@@ -79,7 +82,6 @@ function Upload({ onNext, onPrevious }) {
                         onChange={handleImageChange}
                         className="hidden"
                         ref={fileInputRef}
-                        id="file"
                     />
                 </div>
             </div>
@@ -88,16 +90,15 @@ function Upload({ onNext, onPrevious }) {
                     className="absolute inset-4 border-2 border-slate-500 border-dotted rounded-xl flex items-center justify-center cursor-pointer"
                     onClick={handleFileClick}
                 >
-                    {file ? (
+                    {fileName ? (
                         <div className="text-center relative">
-                            <p className="text-slate-600">File Selected: {file.split('/').pop()}</p>
+                            <p className="text-slate-600">File Selected: {fileName}</p>
                             <button
-                                className="absolute  right-0 top-0 -mr-7  mob:mr-0  bg-white p-1 rounded-full"
+                                className="absolute right-0 top-0 -mr-7 mob:mr-0 bg-white p-1 rounded-full"
                                 onClick={handleFileCancel}
                             >
                                 <MdCancel />
                             </button>
-                            
                         </div>
                     ) : (
                         <div className="text-center">
@@ -109,7 +110,6 @@ function Upload({ onNext, onPrevious }) {
                         onChange={handleFileChange}
                         className="hidden"
                         ref={fileInputRef2}
-                        id="file2"
                     />
                 </div>
             </div>

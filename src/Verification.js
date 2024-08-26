@@ -1,74 +1,8 @@
-// import SignatureCanvas from 'react-signature-canvas';
-// import { useRef, useState } from 'react';
-
-// function Verification() {
-//   const signCanvasRef = useRef(null);
-//   const [savedSignature, setSavedSignature] = useState(null);
-
-
-//   const handleClear = (event) => {
-//     event.preventDefault();
-//     signCanvasRef.current.clear();
-//   };
-
-//   const handleSave = () => {
-
-//    let abc= signCanvasRef.current;
-//    console.log("🚀 ~ handleSave ~ abc:", abc)
-   
-
-
-//     setSavedSignature(abc.getTrimmedCanvas().toDataURL('image/png'))
-//     console.log("🚀 ~ Verification ~ savedSignature:", savedSignature);
-
-
-//     let a=savedSignature.getTrimmedCanvas().toDataURL('image/png')
-// console.log("🚀 ~ handleSave ~ a:", a)
-//   }; 
-   
-
-
-
-//   return (
-//     <>
-//       <div>
-//         <select>
-//           <option value="#">Choose Country</option>
-//           <option>Pakistan</option>
-//           <option>India</option>
-//           <option>America</option>
-//           <option>London</option>
-//         </select>
-//         <input type="radio" name="gender" /> Male
-//         <input type="radio" name="gender" /> Female
-
-//         <div>
-//           <SignatureCanvas
-//             ref={signCanvasRef}
-//             penColor="black"
-//             canvasProps={{ width: 500, height: 200, className: 'sigCanvas bg-white' }}
-//           />
-//         </div>
-//         <button type="button" onClick={handleClear}>Clear</button>
-//         <button type="button" onClick={handleSave}>Save</button>
-
-        
-//       </div>
-//     </>
-//   );
-// }
-
-// export default Verification;
-
-
-
-
 import SignatureCanvas from 'react-signature-canvas';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
-function Verification() {
+function Verification({ values, handleChange, handleSignatureSave, onNext, onPrevious }) {
   const signCanvasRef = useRef(null);
-  const [savedSignature, setSavedSignature] = useState(null);
 
   const handleClear = (event) => {
     event.preventDefault();
@@ -76,62 +10,85 @@ function Verification() {
   };
 
   const handleSave = () => {
-    const canvas = signCanvasRef.current.getTrimmedCanvas(); // Get the trimmed canvas
-    const imageDataURL = canvas.toDataURL('image/png'); // Convert canvas to data URL (image)
-    setSavedSignature(imageDataURL); // Save the data URL in state
+    const canvas = signCanvasRef.current.getTrimmedCanvas();
+    const imageDataURL = canvas.toDataURL('image/png');
+    handleSignatureSave(imageDataURL); // Save the signature in the form data
   };
 
   return (
-    <div >
-      <div className=" w-[40%] p-5 bg-gray-400 mx-auto rounded-lg mt-16 mob:w-80 tab-full tab:w-[600px] h-auto">
-        <h2 className="text-2xl font-semibold mb-4">Signature Verification</h2>
+    <div className="w-[40%] p-5 bg-gray-400 mx-auto rounded-lg mt-16 mob:w-80 tab-full tab:w-[600px] h-auto">
+      <h2 className="text-2xl font-semibold mb-4">Signature Verification</h2>
 
-        <div className="mb-4">
-          <label className="  mb-2 text-xl block">Choose Country:</label>
-          <select className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-            <option value="#">Choose Country</option>
-            <option>Pakistan</option>
-            <option>India</option>
-            <option>America</option>
-            <option>London</option>
-          </select>
-        </div>
+      <div className="mb-4">
+        <label className="mb-2 text-xl block">Choose Country:</label>
+        <select
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          name="country"
+          value={values.country}
+          onChange={handleChange}
+        >
+          <option value="">Choose Country</option>
+          <option value="Pakistan">Pakistan</option>
+          <option value="Pakistan">India</option>
+          <option value="Pakistan">London</option>
+          <option value="Pakistan">France</option>
+          <option value="Pakistan">Americe</option>
+          {/* Add more country options as needed */}
+        </select>
+      </div>
 
-        <div className="mb-4">
-          <span className="block text-xl  mb-2">Gender:</span>
-          <label className="inline-flex items-center mr-4">
-            <input type="radio" name="gender" className="form-radio text-blue-600" />
-            <span className="ml-2 ">Male</span>
+      <div className="mb-4">
+        <label className="mb-2 text-xl block">Gender:</label>
+        <div className="flex gap-4">
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              checked={values.gender === "male"}
+              onChange={handleChange}
+            />
+            Male
           </label>
-          <label className="inline-flex items-center">
-            <input type="radio" name="gender" className="form-radio text-blue-600" />
-            <span className="ml-2 ">Female</span>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              checked={values.gender === "female"}
+              onChange={handleChange}
+            />
+            Female
           </label>
+          {/* Add more gender options as needed */}
         </div>
+      </div>
 
-        <div className="border border-gray-300 bg-gray-50 p-4 rounded-md mb-4">
-          <SignatureCanvas
-            ref={signCanvasRef}
-            penColor="black"
-            canvasProps={{ className: 'sigCanvas w-full h-48 bg-white border border-gray-300 rounded-md' }}
-          />
+      <div className="mb-4">
+        <SignatureCanvas
+          ref={signCanvasRef}
+          penColor='black'
+          canvasProps={{ width: 500, height: 200, className: 'signature-canvas bg-white' }}
+        />
+        <div className="flex gap-4 mt-2">
+          <button onClick={handleClear} type='button' className="bg-red-500 text-white p-2 rounded">Clear</button>
+          <button onClick={handleSave} type='button' className="bg-blue-500 text-white p-2 rounded">Save Signature</button>
         </div>
+      </div>
 
-        <div className="flex justify-between mb-4">
-          <button type="button" onClick={handleClear} className="bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            Clear
-          </button>
-          <button type="button" onClick={handleSave} className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            Save
-          </button>
-        </div>
-
-        {/* {savedSignature && (
-          <div className="mt-4">
-            <h3 className="text-xl font-semibold mb-2">Saved Signature:</h3>
-            <img src={savedSignature} alt="Saved signature" className="w-full max-w-xs border border-gray-300 rounded-md" />
-          </div>
-        )} */}
+      <div className="flex justify-between mt-5">
+        <button
+          className="bg-blue-600 text-white p-2 rounded"
+          onClick={onPrevious}
+        >
+          Previous
+        </button>
+        <button
+          className="bg-blue-600 text-white p-2 rounded"
+          onClick={onNext}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 
 import './App.css';
-import From from './form';
+import Form from './form';
 
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div >
       
       <div>
-            <From />
+            <Form />
            </div>
      
              

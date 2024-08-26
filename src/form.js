@@ -14,12 +14,14 @@ function Form() {
         email: "",
         phone: "",
         password: "",
+        confirmPassword: "",
         image: null,
         file: null,
         signature: null,
         country: "",
         gender: ""
     });
+    const [phoneError, setPhoneError] = useState("");
 
     const handleNext = () => {
         setStep(step + 1);
@@ -34,21 +36,46 @@ function Form() {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSignatureSave = (signature) => {
-        setFormData({ ...formData, signature });
+    const handlePhoneChange = (number) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            phone: number
+        }));
+
+        // Validate phone number in real-time
+        if (number.trim() === '') {
+            setPhoneError("Phone number is required.");
+        } else {
+            setPhoneError('');
+        }
     };
 
     const handleSubmit = () => {
-        // Handle form submission, e.g., send data to an API
         console.log("Form data submitted:", formData);
         handleNext(); // Move to the next step or final action
+    };
+
+    const handleSignatureSave = (signature) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            signature: signature
+        }));
     };
 
     return (
         <div>
             <form>
                 {step === 1 && <Info onNext={handleNext} values={formData} handleChange={handleChange} />}
-                {step === 2 && <Contact onNext={handleNext} onPrevious={handlePrevious} values={formData} handleChange={handleChange} />}
+                {step === 2 && (
+                    <Contact
+                        onNext={handleNext}
+                        onPrevious={handlePrevious}
+                        values={formData}
+                        handleChange={handleChange}
+                        setFormData={setFormData}
+                        handlePhoneChange={handlePhoneChange}
+                    />
+                )}
                 {step === 3 && <Upload onNext={handleNext} onPrevious={handlePrevious} values={formData} handleChange={handleChange} />}
                 {step === 4 && (
                     <Verification
@@ -67,8 +94,9 @@ function Form() {
                         onNext={handleNext}
                     />
                 )}
-               {step===6 && <Submit/>}
+                {step === 6 && <Submit />}
             </form>
+           
         </div>
     );
 }

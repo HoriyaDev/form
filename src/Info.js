@@ -38,11 +38,20 @@ function Info({ onNext, handleChange, values }) {
         //     setFirstError("*First name must be between 2 and 10 characters");
         //     isValid = false;
         // }
-
-        if (values.lastName.trim() === "" || values.lastName.length < 2 || values.lastName.length > 10) {
+           
+        if(values.lastName.trim() === ""){
+            setLastError("field required")
+            isValid = false
+        }
+        else if(values.lastName.length < 2 || values.lastName.length > 10){
             setLastError("*Last name must be between 2 and 10 characters");
             isValid = false;
         }
+
+        // if (values.lastName.trim() === "" || values.lastName.length < 2 || values.lastName.length > 10) {
+        //     setLastError("*Last name must be between 2 and 10 characters");
+        //     isValid = false;
+        // }
 
         if (isValid) {
             onNext();

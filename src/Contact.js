@@ -1,88 +1,116 @@
 import { useState } from "react";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+import { BsEyeSlashFill, BsEyeFill } from "react-icons/bs";
 
-function Contact({ onNext, onPrevious, handleChange, values }) {
+function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneChange }) {
     const [emailError, setEmailError] = useState('');
     const [phoneError, setPhoneError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [phone, setPhone] = useState(values.phone || ''); // Initialize with existing phone value
+    const [showPassword, setShowPassword] = useState(false);
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [showConfirm, setShowConfirm] = useState(false);
+
+    const handlePhoneInputChange = (phoneNumber) => {
+        setPhone(phoneNumber); // Update local phone state
+        handlePhoneChange(phoneNumber); // Update form data in parent
+    };
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     }
 
-    function validatePhoneNumber(phone) {
-        const phoneRegex = /^\+?1?\d{10,15}$/;
-        return phoneRegex.test(phone);
-    }
-
     function validatePassword(password) {
-        // Must have at least one letter, one number, and be at least 8 characters long
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         return passwordRegex.test(password);
     }
 
     const validation = () => {
         let isValid = true;
+        const email = values.email || '';
+        const phoneNumber = phone || '';
+        const password = values.password || '';
+        const confirmPassword = values.confirmPassword || '';
 
-        // Check if email is valid
-        if (values.email.trim() === '' || !validateEmail(values.email)) {
+        if (email.trim() === '') {
+            setEmailError("*field requires");
+            isValid = false;
+        } else if (!validateEmail(email)) {
             setEmailError("Please enter a valid email address.");
             isValid = false;
         } else {
             setEmailError('');
         }
 
-        // Check if phone number is valid
-        if (values.phone.trim() === '' || !validatePhoneNumber(values.phone)) {
-            setPhoneError("Please enter a valid phone number.");
+        if (phoneNumber.trim() === '') {
+            setPhoneError("Phone number is required.");
             isValid = false;
         } else {
             setPhoneError('');
         }
 
-        // Check if password is valid
-        if (values.password.trim() === '' || !validatePassword(values.password)) {
-            setPasswordError("Please enter a valid password with at least 8 characters, including at least one letter and one number.");
+        if (password.trim() === '') {
+            setPasswordError("* field required");
+            isValid = false;
+        } else if (!validatePassword(password)) {
+            setPasswordError("Please enter a valid password");
             isValid = false;
         } else {
             setPasswordError('');
         }
 
-        // If all validations pass, proceed to the next step
+        if (password !== confirmPassword) {
+            setConfirmPasswordError("Passwords do not match");
+            isValid = false;
+        } else {
+            setConfirmPasswordError('');
+        }
+
         if (isValid) {
             onNext();
         }
     };
 
     const handleInputChange = (e) => {
-        handleChange(e); // Call the passed-in handleChange function
+        if (e.target) {
+            handleChange(e);
+            const { name, value } = e.target;
 
-        const { name, value } = e.target;
-        
-        // Validate and clear errors in real-time
-        if (name === "email") {
-            if (!validateEmail(value)) {
-                setEmailError("Please enter a valid email address.");
-            } else {
-                setEmailError('');
+            if (name === "email") {
+                if (!validateEmail(value)) {
+                    setEmailError("Please enter a valid email address.");
+                } else {
+                    setEmailError('');
+                }
+            }
+
+            if (name === "password") {
+                if (!validatePassword(value)) {
+                    setPasswordError("Please enter a valid password with at least 8 characters, including at least one letter and one number.");
+                } else {
+                    setPasswordError('');
+                }
+            }
+
+            if (name === "confirmPassword") {
+                const password = values.password || '';
+                if (password !== value) {
+                    setConfirmPasswordError("Passwords do not match");
+                } else {
+                    setConfirmPasswordError('');
+                }
             }
         }
+    };
 
-        if (name === "phone") {
-            if (!validatePhoneNumber(value)) {
-                setPhoneError("Please enter a valid phone number.");
-            } else {
-                setPhoneError('');
-            }
-        }
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
-        if (name === "password") {
-            if (!validatePassword(value)) {
-                setPasswordError("Please enter a valid password with at least 8 characters, including at least one letter and one number.");
-            } else {
-                setPasswordError('');
-            }
-        }
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirm(!showConfirm);
     };
 
     return (
@@ -97,45 +125,70 @@ function Contact({ onNext, onPrevious, handleChange, values }) {
                         id="email"
                         className="w-full mt-2 p-2 rounded-lg"
                         name="email"
-                        value={values.email}
+                        value={values.email || ''}
                         onChange={handleInputChange}
                     />
                 </label>
                 <p className="text-red-700">{emailError}</p>
-                
-                <label htmlFor="phone" className="text-xl mt-4">
-                    Phone:
-                    <input
-                        type="text"
-                        placeholder="0000000000"
+
+                <label htmlFor="phone" className="text-xl mt-2">
+                    Phone Number:
+                    <PhoneInput
+                        defaultCountry="RU"
+                        value={phone}
+                        onChange={handlePhoneInputChange}
                         id="phone"
-                        className="w-full mt-2 p-2 rounded-lg"
                         name="phone"
-                        value={values.phone}
-                        onChange={handleInputChange}
+                        className="w-full mt-2 p-2 rounded-lg h-12 bg-white border-2 border-red-400"
+                        style={{ '--flag-size': '17px' }}
                     />
                 </label>
                 <p className="text-red-700">{phoneError}</p>
 
                 <label htmlFor="password" className="text-xl mt-4">
                     Password:
-                    <input
-                        type="password"
-                        id="password"
-                        className="w-full mt-2 p-2 rounded-lg"
-                        name="password"
-                        value={values.password}
-                        onChange={handleInputChange}
-                    />
-                    <input type="checkbox" onChange={(e) => {
-                        const passwordField = document.getElementById('password');
-                        passwordField.type = e.target.checked ? 'text' : 'password';
-                    }}
-                    className="w-4 h-4" /> Show password
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            className="w-full mt-2 p-2 rounded-lg"
+                            name="password"
+                            value={values.password || ''}
+                            onChange={handleInputChange}
+                        />
+                        <button 
+                            type="button" 
+                            onClick={togglePasswordVisibility} 
+                            className="absolute inset-y-7 right-3 flex items-center z-20"
+                        >
+                            {showPassword ? <BsEyeFill /> : <BsEyeSlashFill />}
+                        </button>
+                    </div>
                 </label>
                 <p className="text-red-700 mb-10">{passwordError}</p>
-            </div>
-            <button
+
+                <label htmlFor="confirmPassword" className="text-xl">
+                    Confirm Password:
+                    <div className="relative">
+                        <input
+                            type={showConfirm ? "text" : "password"}
+                            id="confirmPassword"
+                            className="w-full mt-2 p-2 rounded-lg"
+                            name="confirmPassword"
+                            value={values.confirmPassword || ''}
+                            onChange={handleInputChange}
+                        />
+                        <button
+                            type="button"
+                            onClick={toggleConfirmPasswordVisibility}
+                            className="absolute inset-y-7 right-3 flex items-center z-20"
+                        >
+                            {showConfirm ? <BsEyeFill /> : <BsEyeSlashFill />}
+                        </button>
+                    </div>
+                </label>
+                <p className="text-red-700 mb-10">{confirmPasswordError}</p>
+                <button
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 float-right absolute bottom-0 right-0 mb-4"
                 onClick={validation}
                 type="button"
@@ -149,6 +202,7 @@ function Contact({ onNext, onPrevious, handleChange, values }) {
             >
                 Previous
             </button>
+            </div>
         </div>
     );
 }

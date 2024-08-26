@@ -12,8 +12,8 @@ function Verification({ values, handleChange, handleSignatureSave, onNext, onPre
   const handleSave = () => {
     const canvas = signCanvasRef.current.getTrimmedCanvas();
     const imageDataURL = canvas.toDataURL('image/png');
-    handleSignatureSave(imageDataURL); 
-    alert('Saved')
+    handleSignatureSave(imageDataURL); // Save the signature to parent component state
+    alert('Signature Saved');
   };
 
   return (
@@ -30,10 +30,10 @@ function Verification({ values, handleChange, handleSignatureSave, onNext, onPre
         >
           <option value="">Choose Country</option>
           <option value="Pakistan">Pakistan</option>
-          <option value="Pakistan">India</option>
-          <option value="Pakistan">London</option>
-          <option value="Pakistan">France</option>
-          <option value="Pakistan">Americe</option>
+          <option value="India">India</option>
+          <option value="London">London</option>
+          <option value="France">France</option>
+          <option value="America">America</option>
           {/* Add more country options as needed */}
         </select>
       </div>

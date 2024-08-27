@@ -38,14 +38,14 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
             setEmailError("*field requires");
             isValid = false;
         } else if (!validateEmail(email)) {
-            setEmailError("Please enter a valid email address.");
+            setEmailError("*Please enter a valid email address.");
             isValid = false;
         } else {
             setEmailError('');
         }
 
         if (phoneNumber.trim() === '') {
-            setPhoneError("Phone number is required.");
+            setPhoneError("*Phone number is required.");
             isValid = false;
         } else {
             setPhoneError('');
@@ -55,14 +55,14 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
             setPasswordError("* field required");
             isValid = false;
         } else if (!validatePassword(password)) {
-            setPasswordError("Please enter a valid password");
+            setPasswordError("*Please enter a valid password");
             isValid = false;
         } else {
             setPasswordError('');
         }
 
         if (password !== confirmPassword) {
-            setConfirmPasswordError("Passwords do not match");
+            setConfirmPasswordError("*Passwords do not match");
             isValid = false;
         } else {
             setConfirmPasswordError('');
@@ -80,7 +80,7 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
 
             if (name === "email") {
                 if (!validateEmail(value)) {
-                    setEmailError("Please enter a valid email address.");
+                    setEmailError("*Please enter a valid email address.");
                 } else {
                     setEmailError('');
                 }
@@ -88,7 +88,7 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
 
             if (name === "password") {
                 if (!validatePassword(value)) {
-                    setPasswordError("Please enter a valid password with at least 8 characters, including at least one letter and one number.");
+                    setPasswordError("*Please enter a valid password with at least 8 characters, including at least one letter and one number.");
                 } else {
                     setPasswordError('');
                 }
@@ -114,9 +114,10 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
     };
 
     return (
-        <div className="w-[40%] p-5 bg-slate-400 mx-auto h-auto rounded-lg mt-20 relative mob:w-80 tab:w-[600px]">
-            <h1 className="text-3xl font-semibold">Contact Info</h1>
-            <div className="flex flex-col mt-5">
+         
+        <div className="w-[500px] max-w-[800px]  h-[590px] mx-auto p-5 bg-gray-400    rounded-lg flex flex-col mob:w-full mob:h-screen tab:h-[60%] relative">
+            <h1 className="text-3xl font-semibold mob:text-center tab:text-center">Contact Info</h1>
+            <div className="flex flex-col mt-5 mb-10 ">
                 <label htmlFor="email" className="text-xl">
                     Email Address:
                     <input
@@ -139,7 +140,7 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
                         onChange={handlePhoneInputChange}
                         id="phone"
                         name="phone"
-                        className="w-full mt-2 p-2 rounded-lg h-12 bg-white border-2 border-red-400"
+                        className="w-full mt-2 p-2 rounded-lg h-12 bg-white "
                         style={{ '--flag-size': '17px' }}
                     />
                 </label>
@@ -165,7 +166,7 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
                         </button>
                     </div>
                 </label>
-                <p className="text-red-700 mb-10">{passwordError}</p>
+                <p className="text-red-700 mb-5">{passwordError}</p>
 
                 <label htmlFor="confirmPassword" className="text-xl">
                     Confirm Password:
@@ -189,14 +190,14 @@ function Contact({ onNext, onPrevious, values = {}, handleChange, handlePhoneCha
                 </label>
                 <p className="text-red-700 mb-10">{confirmPasswordError}</p>
                 <button
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 float-right absolute bottom-0 right-0 mb-4"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 float-right  bottom-14  right-3 mob:bottom-36 mob:right-10 tab:bottom-20  absolute "
                 onClick={validation}
                 type="button"
             >
                 Next
             </button>
             <button
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 float-left absolute bottom-0 mb-4"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 float-left absolute bottom-10  mb-4 mob:bottom-32  tab:bottom-7 mob:left-10"
                 onClick={onPrevious}
                 type="button"
             >

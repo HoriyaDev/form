@@ -63,8 +63,8 @@ function Form() {
     };
 
     return (
-        <div>
-            <form>
+        <div   > 
+            <form >
                 {step === 1 && <Info onNext={handleNext} values={formData} handleChange={handleChange} />}
                 {step === 2 && (
                     <Contact
@@ -96,7 +96,6 @@ function Form() {
                 )}
                 {step === 6 && <Submit />}
             </form>
-           
         </div>
     );
 }

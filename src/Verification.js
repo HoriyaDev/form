@@ -17,7 +17,7 @@ function Verification({ values, handleChange, handleSignatureSave, onNext, onPre
   };
 
   return (
-    <div className="w-[40%] p-5 bg-gray-400 mx-auto rounded-lg mt-6 mob:w-80 tab-full tab:w-[600px] h-auto">
+    <div className="w-[500px]  mx-auto p-5 bg-gray-400   mob:mt-0  rounded-lg flex flex-col mob:w-[400px] mob:h-screen tab:h-[60%] relative">
       <h2 className="text-2xl font-semibold mb-4">Signature Verification</h2>
 
       <div className="mb-4">
@@ -70,7 +70,7 @@ function Verification({ values, handleChange, handleSignatureSave, onNext, onPre
         <SignatureCanvas
           ref={signCanvasRef}
           penColor='black'
-          canvasProps={{ width: 500, height: 200, className: 'signature-canvas bg-white' }}
+          canvasProps={{ width: 460, height: 200, className: 'signature-canvas bg-white' }}
         />
         <div className="flex gap-4 mt-2">
           <button onClick={handleClear} type='button' className="bg-red-500 text-white p-2 rounded">Clear</button>

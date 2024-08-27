@@ -24,7 +24,7 @@ function Review({ values, onPrevious, handleSubmit, onNext }) {
     };
 
     return (
-        <div className="w-[40%] p-5 bg-gray-400 mx-auto rounded-lg mob:w-80 tab:w-[600px] h-auto">
+        <div className="w-[50%]  mx-auto p-5 bg-gray-400   mob:mt-0  rounded-lg flex flex-col mob:w-[400px] mob:h-screen tab:h-[60%] relative">
             <h2 className="text-2xl font-semibold mb-4">Review Your Information</h2>
 
             <div className="mb-4">

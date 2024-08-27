@@ -46,8 +46,8 @@ function Upload({ onNext, onPrevious, values, handleChange }) {
     };
 
     return (
-        <div className="w-[40%] p-5 bg-slate-400 mx-auto h-auto rounded-lg mt-20 mob:w-80 tab:w-[600px]">
-            <div className="border-slate-300 flex flex-col-reverse border-2 bg-slate-50 w-full h-48 rounded-xl relative">
+        <div className="w-[500px] max-w-[800px]    mt-20 mx-auto p-5 bg-gray-400    rounded-lg flex flex-col mob:w-[375px] mob:h-screen tab:h-[60%] relative">
+            <div className="border-slate-300  flex flex-col-reverse border-2 bg-slate-50 w-full h-48 rounded-xl relative">
                 <div
                     className="absolute inset-4 border-2 border-slate-500 border-dotted rounded-xl flex items-center justify-center cursor-pointer"
                     onClick={handleClick}
